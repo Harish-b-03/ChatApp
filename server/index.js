@@ -27,9 +27,11 @@ io.on('connection',(socket)=>{
         if (error){
             // return callback(error);
             // callback();
+            console.log("Error in join",error)
+            return
         }
-        
-        socket.emit('message', {user:'admin', text:`${user.name}, welcome to the room ${user.room}`});
+        console.log(user)
+        // socket.emit('message', {user:'admin', text:`${user.name}, welcome to the room ${user.room}`});
         socket.broadcast.to(user.room).emit('message',{ user:"admin", text:`${user.name} has joined!`});
         socket.join(user.room);
         // callback();
@@ -44,8 +46,9 @@ io.on('connection',(socket)=>{
         callback();
     })
 
-    socket.on('disconnect',(s)=>{
+    socket.on('disconnect',()=>{
         console.log(`we lost a connection`);
+        deleteUser(socket.id);
     })
 })
 
